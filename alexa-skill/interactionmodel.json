@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "electro transmorgify",
+            "invocationName": "electro transmogrify",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",

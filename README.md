@@ -11,7 +11,7 @@ To start with it is one less complexity to use the APIs and this will specifical
 The front end will  be created with the developer skills framework in the console. This can then generate the initial json which will then be stored here and can be updated with an API CI job.
 
 ### Invocation:
-- "electro transmorgify"
+- "electro transmogrify"
 
 ### Intents and utterance mapping:
 - Utterance: "What is the current carbon intensity" -> GetCurrentCarbonIntensity
