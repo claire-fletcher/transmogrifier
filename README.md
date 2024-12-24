@@ -1,7 +1,7 @@
 # transmogrifier
 An Alexa skill to get and use information about the current carbon intensity using the carbon aware SDK. Enabling "transmogrification" of electricity usage into carbon aware usage - a.k.a. enabling demand shifting. 
 
-# Initial Design - MVP v1.0.0
+# Initial Design - MVP v0.0.1
 There are a few options including an SDK with more control over the data we collect or alternatively using already hosted APIs to get the data.
 To start with it is one less complexity to use the APIs and this will specifically use the UK's national grid API. This has good documentation, no tiered usage, and the most aligned terms of use.
 
