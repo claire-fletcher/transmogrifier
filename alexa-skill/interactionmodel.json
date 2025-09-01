@@ -16,19 +16,6 @@
                     "samples": []
                 },
                 {
-                    "name": "HelloWorldIntent",
-                    "slots": [],
-                    "samples": [
-                        "hello",
-                        "how are you",
-                        "say hi world",
-                        "say hi",
-                        "hi",
-                        "say hello world",
-                        "say hello"
-                    ]
-                },
-                {
                     "name": "AMAZON.NavigateHomeIntent",
                     "samples": []
                 },
@@ -40,6 +27,7 @@
                     "name": "GetCurrentCarbonIntensity",
                     "slots": [],
                     "samples": [
+                        "current carbon intensity",
                         "what is the current carbon intensity"
                     ]
                 }
