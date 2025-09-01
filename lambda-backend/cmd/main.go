@@ -3,26 +3,37 @@ package main
 import (
 	"log"
 
-	CarbonIntensityFinder "github.com/claire-fletcher/transmogrifier/pkg"
-	"github.com/gin-gonic/gin"
+	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/claire-fletcher/transmogrifier/internal/alexa"
 )
 
-func main() {
+//TODO: stripped back to basics to just get that to work first.
 
-	// setup the carbon intensity finder for the UK CI API
-	ukci, err := CarbonIntensityFinder.CreateCarbonIntensityFinder("https://api.carbonintensity.org.uk/intensity")
-	if err != nil {
-		log.Panicf("Unable to create carbon intensity finder due to error: %v", err)
+func IntentDispatcher(request alexa.Request) alexa.Response {
+
+	log.Printf("Received request: %+v", request) // TODO: Debugging
+
+	var response alexa.Response
+	switch request.Body.Intent.Name {
+	default:
+		response = HandleGeneric()
 	}
 
-	// setup server with routes for getting the carbon intensity
-	router := gin.Default()
+	return response
+}
 
-	// TODO: host a route for a launch request and session end request
+func HandleGeneric() alexa.Response {
+	return alexa.NewSimpleResponse("testing", "Hello from Lambda!")
+}
 
-	router.GET("/getCurrentCarbonIntensity", func(c *gin.Context) {
-		ukci.GetCurrentCarbonIntensity(c)
-	})
+// This is the specific lambda handler for a request coming in
+func Handler(request alexa.Request) (alexa.Response, error) {
+	log.Printf("Handler received request: %+v", request) // TODO: Debugging
 
-	router.Run(":8080")
+	return IntentDispatcher(request), nil
+}
+
+func main() {
+	// Trigger
+	lambda.Start(Handler)
 }
