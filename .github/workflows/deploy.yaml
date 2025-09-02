@@ -36,4 +36,4 @@ jobs:
         uses: aws-actions/aws-lambda-deploy@v1
         with:
           function-name: transmogrification
-          code-artifacts-dir: ./lambda-backend/cmd/function.zip
+          code-artifacts-dir: ./lambda-backend/cmd
