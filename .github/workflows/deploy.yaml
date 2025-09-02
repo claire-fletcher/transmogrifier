@@ -22,7 +22,8 @@ jobs:
       
       - name: Build and Zip Lambda
         run: |
-          GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bootstrap ./lambda-backend/cmd/main.go
+          cd lambda-backend/cmd
+          GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bootstrap main.go
           zip function.zip bootstrap
 
       - name: Configure AWS credentials
