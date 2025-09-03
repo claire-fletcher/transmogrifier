@@ -19,6 +19,7 @@ func CreateCarbonIntensityFinder(currentIntensitySource string) (*CarbonIntensit
 
 func (cif CarbonIntensityFinder) GetCurrentCarbonIntensity() int {
 	// TODO: get the actual intensity
+	// USE cif.CurrentIntensitySource.String() as an http url and set up http request to the api
 
 	return 200
 }
