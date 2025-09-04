@@ -37,3 +37,5 @@ jobs:
           aws lambda update-function-code \
             --function-name transmogrification \
             --zip-file fileb://lambda-backend/cmd/function.zip
+            --handler provided
+            --runtime provided.al2023
