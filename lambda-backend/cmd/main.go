@@ -1,20 +1,17 @@
 package main
 
 import (
-	"log"
-
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/claire-fletcher/transmogrifier/internal/alexa"
+	CarbonIntensityFinder "github.com/claire-fletcher/transmogrifier/internal/carbon-intensity-finder"
 )
-
-//TODO: stripped back to basics to just get that to work first.
 
 func IntentDispatcher(request alexa.Request) alexa.Response {
 
-	log.Printf("Received request: %+v", request) // TODO: Debugging
-
 	var response alexa.Response
 	switch request.Body.Intent.Name {
+	case "GetCurrentCarbonIntensity":
+		response = HandleCarbonIntensity()
 	default:
 		response = HandleGeneric()
 	}
@@ -26,10 +23,22 @@ func HandleGeneric() alexa.Response {
 	return alexa.NewSimpleResponse("testing", "Hello from Lambda!")
 }
 
+func HandleCarbonIntensity() alexa.Response {
+	ukci, err := CarbonIntensityFinder.CreateCarbonIntensityFinder("https://api.carbonintensity.org.uk/intensity")
+	if err != nil {
+		return alexa.NewSimpleResponse("Error", "There was an error getting the carbon intensity.")
+	}
+
+	currentCI, err := ukci.GetCurrentCarbonIntensity()
+	if err != nil {
+		return alexa.NewSimpleResponse("Error", "There was an error getting the carbon intensity.")
+	}
+
+	return alexa.NewSimpleResponse("Carbon Intensity", "The current carbon intensity is "+string(rune(currentCI)))
+}
+
 // This is the specific lambda handler for a request coming in
 func Handler(request alexa.Request) (alexa.Response, error) {
-	log.Printf("Handler received request: %+v", request) // TODO: Debugging
-
 	return IntentDispatcher(request), nil
 }
 
