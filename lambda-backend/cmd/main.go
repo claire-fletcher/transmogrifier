@@ -10,7 +10,7 @@ func IntentDispatcher(request alexa.Request) alexa.Response {
 
 	var response alexa.Response
 	switch request.Body.Intent.Name {
-	case "CarbonIntensityIntent":
+	case "GetCurrentCarbonIntensity":
 		response = HandleCarbonIntensity()
 	default:
 		response = HandleGeneric()
