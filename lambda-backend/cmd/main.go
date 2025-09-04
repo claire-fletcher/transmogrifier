@@ -28,7 +28,11 @@ func HandleCarbonIntensity() alexa.Response {
 	if err != nil {
 		return alexa.NewSimpleResponse("Error", "There was an error getting the carbon intensity.")
 	}
-	currentCI := ukci.GetCurrentCarbonIntensity()
+
+	currentCI, err := ukci.GetCurrentCarbonIntensity()
+	if err != nil {
+		return alexa.NewSimpleResponse("Error", "There was an error getting the carbon intensity.")
+	}
 
 	return alexa.NewSimpleResponse("Carbon Intensity", "The current carbon intensity is "+string(rune(currentCI)))
 }
