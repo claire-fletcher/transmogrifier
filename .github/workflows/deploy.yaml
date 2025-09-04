@@ -32,8 +32,8 @@ jobs:
           role-to-assume: ${{ secrets.AWS_LAMBDA_DEPLOY_ROLE_ARN }}
           aws-region: eu-north-1
       
-      - name: Deploy Lambda Function
-        uses: aws-actions/aws-lambda-deploy@v1
-        with:
-          function-name: transmogrification
-          code-artifacts-dir: ./lambda-backend/cmd
+      - name: Deploy to Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name transmogrification \
+            --zip-file fileb://lambda-backend/cmd/function.zip
