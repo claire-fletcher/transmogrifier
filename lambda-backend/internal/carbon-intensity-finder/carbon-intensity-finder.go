@@ -1,3 +1,4 @@
+//go:generate mockgen -source=carbon-intensity-finder.go -destination=mock/carbon-intensity-finder.go
 package CarbonIntensityFinder
 
 import (
@@ -7,6 +8,10 @@ import (
 	"net/url"
 	"time"
 )
+
+type CarbonItensityFinder interface {
+	GetCurrentCarbonIntensity() (int, error)
+}
 
 type CarbonIntensityFinder struct {
 	CurrentIntensitySource *url.URL

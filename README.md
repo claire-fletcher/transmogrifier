@@ -46,3 +46,6 @@ https://docs.aws.amazon.com/lambda/latest/dg/golang-package.html
 - errors 
 - build out a visual response creator as well as the simple speech
 - Versioning and ctx trace tokens in logs and connected to traces.
+
+
+go generate -v ./... for generation, perhaps in a make file to do things locally easier?
