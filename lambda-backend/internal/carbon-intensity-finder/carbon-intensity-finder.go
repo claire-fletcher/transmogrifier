@@ -26,16 +26,13 @@ func CreateCarbonIntensityFinder(currentIntensitySource string) (*CarbonIntensit
 	return &CarbonIntensityFinder{CurrentIntensitySource: u}, nil
 }
 
+// TODO: separate out to generic http helpers
 func (cif CarbonIntensityFinder) GetCurrentCarbonIntensity() (int, error) {
-
 	// custom http client with timeout is needed as the default one has no timeout
 	client := &http.Client{
 		Timeout: time.Second * 10,
 	}
 
-	// Current half an hour intensity
-	// TODO: can create the request outside if we want to
-	// Could also create a generic make request thing for http helpers, only if start to do it a lot
 	resp, err := client.Do(&http.Request{
 		Method: "GET",
 		URL:    cif.CurrentIntensitySource,
@@ -46,7 +43,6 @@ func (cif CarbonIntensityFinder) GetCurrentCarbonIntensity() (int, error) {
 	// TODO: handle responses
 
 	defer resp.Body.Close()
-	// Read and print response
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return 0, err

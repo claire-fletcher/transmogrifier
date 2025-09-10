@@ -37,17 +37,17 @@ func TestCarbonIntensityFinderReturnsValue(t *testing.T) {
 
 	u, err := url.Parse(server.URL)
 	if err != nil {
-		t.Fatalf("Failed to parse URL: %v", err)
+		t.Fatalf("Failed to parse the carbon intensity finder url: %v", err)
 	}
 	testCIF, err := CreateCarbonIntensityFinder(u.String())
 	if err != nil {
-		t.Fatalf("Failed to create CarbonIntensityFinder: %v", err)
+		t.Fatalf("Failed to create the carbon intensity finder: %v", err)
 	}
 
 	/** Act **/
 	result, err := testCIF.GetCurrentCarbonIntensity()
 	if err != nil {
-		t.Fatalf("GetCurrentCarbonIntensity returned an error: %v", err)
+		t.Fatalf("Failed to get the current carbon intensity: %v", err)
 	}
 
 	/** Assert **/
