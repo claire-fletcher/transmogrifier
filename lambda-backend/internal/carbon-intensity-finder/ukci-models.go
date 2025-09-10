@@ -1,7 +1,7 @@
 package CarbonIntensityFinder
 
 type UKCIResponse struct {
-	Data Data `json:"data"`
+	Data []Data `json:"data"`
 }
 
 type Data struct {
