@@ -1,31 +1,57 @@
-package CarbonIntensityFinder
+package CarbonIntensityFinder_test
 
 import (
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
 	"testing"
 
-	mock "github.com/claire-fletcher/transmogrifier/internal/carbon-intensity-finder/mock"
-
-	"github.com/stretchr/testify/assert"
-	"go.uber.org/mock/gomock"
+	. "github.com/claire-fletcher/transmogrifier/internal/carbon-intensity-finder"
 )
 
+func createMockUKCIResponse(actual int) string {
+	return fmt.Sprintf(`{
+		"data": {
+			"from": "2024-01-01T00:00Z",
+			"to": "2024-01-01T00:30Z",
+			"intensity": {
+				"forecast": 150,
+				"actual": %d,
+				"index": "moderate"
+			}
+		}
+	}`, actual)
+}
+
+// TODO: consider the testify suite instead for better assertions
+// TODO: should we be creating json or just creating a struct using a create method and then unmarshalling to json string?
 func TestCarbonIntensityFinderReturnsValue(t *testing.T) {
 
 	/** Arrange **/
-	ctrl := gomock.NewController(t)
-	mockCIF := mock.NewMockCarbonItensityFinder(ctrl)
-	mockCIF.EXPECT().GetCurrentCarbonIntensity().Return(100, nil).Times(1)
+	testForecast := 123
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, createMockUKCIResponse(testForecast))
+	}))
+	defer server.Close()
 
-	// TODO:  may need to split out the call to the api so that we can mock it here as otherwise we are just saying, return 100.
+	u, err := url.Parse(server.URL)
+	if err != nil {
+		t.Fatalf("Failed to parse URL: %v", err)
+	}
+	testCIF, err := CreateCarbonIntensityFinder(u.String())
+	if err != nil {
+		t.Fatalf("Failed to create CarbonIntensityFinder: %v", err)
+	}
 
 	/** Act **/
-	intensity, err := mockCIF.GetCurrentCarbonIntensity()
+	result, err := testCIF.GetCurrentCarbonIntensity()
+	if err != nil {
+		t.Fatalf("GetCurrentCarbonIntensity returned an error: %v", err)
+	}
 
 	/** Assert **/
-	assert.NoError(t, err, "There should be no error")
-	assert.Equal(t, intensity, 100, "The carbon intensity should be 100")
+	if result != testForecast {
+		t.Errorf("Expected result to be %d, got %d", testForecast, result)
+	}
 }
-
-// TODO: Test suites to set up the specific calls and returns so that we can test multiple scenarios including failures more easily
-// TODO: also best practice to work with a context
-// Can use interfacer to create interfaces from the struct to make mocking easier
