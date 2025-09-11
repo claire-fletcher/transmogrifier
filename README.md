@@ -38,3 +38,14 @@ https://docs.aws.amazon.com/lambda/latest/dg/golang-package.html
 4. Upload to lambda using a zip file
 5. Add a trigger for the lambda function using the alexa skill ID 
 6. Connect to the alexa skill by copying the ARN and navigating to the endpoint of the alexa skill and pasting the ARN. Note: you can use ARN for specific version or create an alias arn for different versions as development occurs.
+
+# Improvements
+- logging and error handling
+- metrics
+- tests
+- errors 
+- build out a visual response creator as well as the simple speech
+- Versioning and ctx trace tokens in logs and connected to traces.
+
+
+go generate -v ./... for generation, perhaps in a make file to do things locally easier?
