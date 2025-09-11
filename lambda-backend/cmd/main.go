@@ -5,14 +5,14 @@ import (
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/claire-fletcher/transmogrifier/internal/alexa"
-	CarbonIntensityFinder "github.com/claire-fletcher/transmogrifier/internal/carbon-intensity-finder"
+	cif "github.com/claire-fletcher/transmogrifier/internal/carbon-intensity-finder"
 )
 
 type Transmogrifier struct {
-	CarbonIntensityFinder CarbonIntensityFinder.CarbonItensityFinder
+	CarbonIntensityFinder cif.CarbonItensityFinder
 }
 
-func NewTransmogrifier(c CarbonIntensityFinder.CarbonItensityFinder) Transmogrifier {
+func NewTransmogrifier(c cif.CarbonItensityFinder) Transmogrifier {
 	return Transmogrifier{
 		CarbonIntensityFinder: c,
 	}
@@ -50,11 +50,11 @@ func IntentDispatcher(t Transmogrifier, request alexa.Request) alexa.Response {
 
 // This is the specific lambda handler for a request coming in
 func Handler(request alexa.Request) (alexa.Response, error) {
-	cfi, err := CarbonIntensityFinder.CreateCarbonIntensityFinder("https://api.carbonintensity.org.uk/intensity")
+	ukcif, err := cif.CreateCarbonIntensityFinder("https://api.carbonintensity.org.uk/intensity")
 	if err != nil {
 		return alexa.Response{}, err
 	}
-	t := NewTransmogrifier(cfi)
+	t := NewTransmogrifier(ukcif)
 
 	return IntentDispatcher(t, request), nil
 }
