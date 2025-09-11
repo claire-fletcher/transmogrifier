@@ -12,8 +12,8 @@ type Transmogrifier struct {
 	CarbonIntensityFinder CarbonIntensityFinder.CarbonItensityFinder
 }
 
-func NewTransmogrifier(c CarbonIntensityFinder.CarbonItensityFinder) *Transmogrifier {
-	return &Transmogrifier{
+func NewTransmogrifier(c CarbonIntensityFinder.CarbonItensityFinder) Transmogrifier {
+	return Transmogrifier{
 		CarbonIntensityFinder: c,
 	}
 }
@@ -35,7 +35,7 @@ func (t Transmogrifier) HandleCarbonIntensity() alexa.Response {
     Decide based on readability of what the code is doing.
 **/
 
-func IntentDispatcher(t *Transmogrifier, request alexa.Request) alexa.Response {
+func IntentDispatcher(t Transmogrifier, request alexa.Request) alexa.Response {
 
 	var response alexa.Response
 	switch request.Body.Intent.Name {
