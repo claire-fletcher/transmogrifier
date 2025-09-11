@@ -8,30 +8,22 @@ import (
 	CarbonIntensityFinder "github.com/claire-fletcher/transmogrifier/internal/carbon-intensity-finder"
 )
 
-func IntentDispatcher(request alexa.Request) alexa.Response {
-
-	var response alexa.Response
-	switch request.Body.Intent.Name {
-	case "GetCurrentCarbonIntensity":
-		response = HandleCarbonIntensity()
-	default:
-		response = HandleGeneric()
-	}
-
-	return response
+type Transmogrifier struct {
+	CarbonIntensityFinder CarbonIntensityFinder.CarbonItensityFinder
 }
 
-func HandleGeneric() alexa.Response {
+func NewTransmogrifier(c CarbonIntensityFinder.CarbonItensityFinder) *Transmogrifier {
+	return &Transmogrifier{
+		CarbonIntensityFinder: c,
+	}
+}
+
+func (t Transmogrifier) HandleGeneric() alexa.Response {
 	return alexa.NewSimpleResponse("testing", "Hello from Lambda!")
 }
 
-func HandleCarbonIntensity() alexa.Response {
-	ukci, err := CarbonIntensityFinder.CreateCarbonIntensityFinder("https://api.carbonintensity.org.uk/intensity")
-	if err != nil {
-		return alexa.NewSimpleResponse("Error", "There was an error getting the carbon intensity.")
-	}
-
-	currentCI, err := ukci.GetCurrentCarbonIntensity()
+func (t Transmogrifier) HandleCarbonIntensity() alexa.Response {
+	currentCI, err := t.CarbonIntensityFinder.GetCurrentCarbonIntensity()
 	if err != nil {
 		return alexa.NewSimpleResponse("Error", "There was an error getting the carbon intensity.")
 	}
@@ -39,9 +31,32 @@ func HandleCarbonIntensity() alexa.Response {
 	return alexa.NewSimpleResponse("Carbon Intensity", "The current carbon intensity is "+fmt.Sprint(currentCI))
 }
 
+/** Below here is the lambda specific work. we could split out transmogrifier into its own thing too but it is the MAIN part
+    Decide based on readability of what the code is doing.
+**/
+
+func IntentDispatcher(t *Transmogrifier, request alexa.Request) alexa.Response {
+
+	var response alexa.Response
+	switch request.Body.Intent.Name {
+	case "GetCurrentCarbonIntensity":
+		response = t.HandleCarbonIntensity()
+	default:
+		response = t.HandleGeneric()
+	}
+
+	return response
+}
+
 // This is the specific lambda handler for a request coming in
 func Handler(request alexa.Request) (alexa.Response, error) {
-	return IntentDispatcher(request), nil
+	cfi, err := CarbonIntensityFinder.CreateCarbonIntensityFinder("https://api.carbonintensity.org.uk/intensity")
+	if err != nil {
+		return alexa.Response{}, err
+	}
+	t := NewTransmogrifier(cfi)
+
+	return IntentDispatcher(t, request), nil
 }
 
 func main() {

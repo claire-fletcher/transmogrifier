@@ -29,9 +29,9 @@ func createMockUKCIResponse(actual int) string {
 func TestCarbonIntensityFinderReturnsValue(t *testing.T) {
 
 	/** Arrange **/
-	testForecast := 123
+	testIntensity := 123
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, createMockUKCIResponse(testForecast))
+		fmt.Fprintln(w, createMockUKCIResponse(testIntensity))
 	}))
 	defer server.Close()
 
@@ -51,7 +51,7 @@ func TestCarbonIntensityFinderReturnsValue(t *testing.T) {
 	}
 
 	/** Assert **/
-	if result != testForecast {
-		t.Errorf("Expected result to be %d, got %d", testForecast, result)
+	if result != testIntensity {
+		t.Errorf("Expected result to be %d, got %d", testIntensity, result)
 	}
 }
