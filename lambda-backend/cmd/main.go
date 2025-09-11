@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/claire-fletcher/transmogrifier/internal/alexa"
 	CarbonIntensityFinder "github.com/claire-fletcher/transmogrifier/internal/carbon-intensity-finder"
@@ -34,7 +36,7 @@ func HandleCarbonIntensity() alexa.Response {
 		return alexa.NewSimpleResponse("Error", "There was an error getting the carbon intensity.")
 	}
 
-	return alexa.NewSimpleResponse("Carbon Intensity", "The current carbon intensity is "+string(rune(currentCI)))
+	return alexa.NewSimpleResponse("Carbon Intensity", "The current carbon intensity is "+fmt.Sprint(currentCI))
 }
 
 // This is the specific lambda handler for a request coming in
