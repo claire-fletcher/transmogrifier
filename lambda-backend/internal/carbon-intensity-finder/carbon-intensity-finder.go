@@ -36,6 +36,9 @@ func (cif CarbonIntensityFinder) GetCurrentCarbonIntensity() (int, error) {
 	resp, err := client.Do(&http.Request{
 		Method: "GET",
 		URL:    cif.CurrentIntensitySource,
+		Header: http.Header{
+			"Accept": []string{"application/json"},
+		},
 	})
 	if err != nil {
 		return 0, err

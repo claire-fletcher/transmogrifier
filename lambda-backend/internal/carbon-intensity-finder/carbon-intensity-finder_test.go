@@ -12,7 +12,7 @@ import (
 
 func createMockUKCIResponse(actual int) string {
 	return fmt.Sprintf(`{
-		"data": {
+		"data": [{
 			"from": "2024-01-01T00:00Z",
 			"to": "2024-01-01T00:30Z",
 			"intensity": {
@@ -20,7 +20,7 @@ func createMockUKCIResponse(actual int) string {
 				"actual": %d,
 				"index": "moderate"
 			}
-		}
+		}]
 	}`, actual)
 }
 
