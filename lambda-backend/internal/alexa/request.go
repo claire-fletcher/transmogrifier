@@ -1,11 +1,14 @@
+// Package alexa provides helper functions and structs for handling alexa specific interactions.
 package alexa
 
+// Predefined intents for Alexa skills.
 const (
 	HelpIntent   = "AMAZON.HelpIntent"
 	CancelIntent = "AMAZON.CancelIntent"
 	StopIntent   = "AMAZON.StopIntent"
 )
 
+// Request represents the structure of an Alexa request.
 type Request struct {
 	Version string  `json:"version"`
 	Session Session `json:"session"`
@@ -13,6 +16,7 @@ type Request struct {
 	Context Context `json:"context"`
 }
 
+// Session represents the session information in an Alexa request.
 type Session struct {
 	New         bool   `json:"new"`
 	SessionID   string `json:"sessionId"`
@@ -26,6 +30,7 @@ type Session struct {
 	} `json:"user"`
 }
 
+// Context represents the system information given in an alexa request.
 type Context struct {
 	System struct {
 		APIAccessToken string `json:"apiAccessToken"`
@@ -38,6 +43,7 @@ type Context struct {
 	} `json:"System,omitempty"`
 }
 
+// ReqBody
 type ReqBody struct {
 	Type        string `json:"type"`
 	RequestID   string `json:"requestId"`
