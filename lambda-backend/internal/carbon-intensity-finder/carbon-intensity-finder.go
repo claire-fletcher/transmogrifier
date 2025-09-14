@@ -39,6 +39,11 @@ func (cif CarbonIntensityFinder) GetCurrentCarbonIntensity() (int, error) {
 		Timeout: time.Second * 10,
 	}
 
+	// TODO: consider a context instead and use a request with context
+	// instead of a client with timeout
+	// This is more flexible as the request can have a timeout and the client can have different config.
+	// each request can differ
+
 	resp, err := client.Do(&http.Request{
 		Method: "GET",
 		URL:    cif.CurrentIntensitySource,

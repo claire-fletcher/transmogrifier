@@ -5,7 +5,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/claire-fletcher/transmogrifier/internal/alexa"
-	cif "github.com/claire-fletcher/transmogrifier/internal/carbon-intensity-finder"
+	otellambda "go.opentelemetry.io/contrib/instrumentation/github.com/aws/aws-lambda-go/otellambda"
 )
 
 type Transmogrifier struct {
@@ -61,5 +61,5 @@ func Handler(request alexa.Request) (alexa.Response, error) {
 
 func main() {
 	// Trigger
-	lambda.Start(Handler)
+	lambda.Start(otellambda.InstrumentHandler(Handler))
 }
