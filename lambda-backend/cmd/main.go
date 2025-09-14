@@ -9,22 +9,12 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/github.com/aws/aws-lambda-go/otellambda"
 )
 
-type Transmogrifier struct {
-	cif carbon.CarbonItensityFinder
-}
-
-func NewTransmogrifier(c carbon.CarbonItensityFinder) Transmogrifier {
-	return Transmogrifier{
-		cif: c,
-	}
-}
-
-func (t Transmogrifier) HandleGeneric() alexa.Response {
+func HandleGeneric() alexa.Response {
 	return alexa.NewSimpleResponse("testing", "Hello from Lambda!")
 }
 
-func (t Transmogrifier) HandleCarbonIntensity() alexa.Response {
-	ci, err := t.cif.GetCurrentCarbonIntensity()
+func HandleCarbonIntensity(cif carbon.CarbonIntensityFinder) alexa.Response {
+	ci, err := cif.GetCurrentCarbonIntensity()
 	if err != nil {
 		return alexa.NewSimpleResponse("Error", "There was an error getting the carbon intensity.")
 	}
@@ -36,14 +26,14 @@ func (t Transmogrifier) HandleCarbonIntensity() alexa.Response {
     Decide based on readability of what the code is doing.
 **/
 
-func IntentDispatcher(t Transmogrifier, request alexa.Request) alexa.Response {
+func IntentDispatcher(cif carbon.CarbonIntensityFinder, request alexa.Request) alexa.Response {
 
 	var response alexa.Response
 	switch request.Body.Intent.Name {
 	case "GetCurrentCarbonIntensity":
-		response = t.HandleCarbonIntensity()
+		response = HandleCarbonIntensity(cif)
 	default:
-		response = t.HandleGeneric()
+		response = HandleGeneric()
 	}
 
 	return response
@@ -52,9 +42,8 @@ func IntentDispatcher(t Transmogrifier, request alexa.Request) alexa.Response {
 // This is the specific lambda handler for a request coming in
 func Handler(request alexa.Request) (alexa.Response, error) {
 	ukcif := carbon.CreateCarbonIntensityFinder("https://api.carbonintensity.org.uk/intensity")
-	t := NewTransmogrifier(ukcif)
 
-	return IntentDispatcher(t, request), nil
+	return IntentDispatcher(ukcif, request), nil
 }
 
 func main() {

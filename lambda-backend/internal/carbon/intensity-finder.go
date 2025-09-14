@@ -10,25 +10,25 @@ import (
 )
 
 // TODO: consider correct interface and mock implementation in consumer
-type CarbonItensityFinder interface {
+type CarbonIntensityFinder interface {
 	GetCurrentCarbonIntensity() (int, error)
 }
 
-type CarbonIntensityFinder struct {
-	CurrentIntensitySource string
+type finder struct {
+	currentIntensitySource string
 }
 
-func CreateCarbonIntensityFinder(url string) CarbonIntensityFinder {
-	return CarbonIntensityFinder{CurrentIntensitySource: url}
+func CreateCarbonIntensityFinder(url string) finder {
+	return finder{currentIntensitySource: url}
 }
 
 // TODO: separate out to generic http helpers
-func (cif CarbonIntensityFinder) GetCurrentCarbonIntensity() (int, error) {
+func (f finder) GetCurrentCarbonIntensity() (int, error) {
 	// Create a timeout for the request
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	req, err := http.NewRequestWithContext(ctx, "GET", cif.CurrentIntensitySource, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", f.currentIntensitySource, nil)
 	if err != nil {
 		return 0, err
 	}

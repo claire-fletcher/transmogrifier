@@ -17,10 +17,8 @@ func TestHandleCarbonIntensityReturnsTheIntensity(t *testing.T) {
 	mockCFI := mock_carbon.NewMockCarbonItensityFinder(mockCtrl)
 	mockCFI.EXPECT().GetCurrentCarbonIntensity().Return(testIntensity, nil)
 
-	testTransmogrifier := NewTransmogrifier(mockCFI)
-
 	/** Act **/
-	response := testTransmogrifier.HandleCarbonIntensity()
+	response := HandleCarbonIntensity(mockCFI)
 
 	/** Assert **/
 	expectedSpeech := "The current carbon intensity is 123"
