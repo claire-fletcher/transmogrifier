@@ -10,12 +10,12 @@ import (
 )
 
 type Transmogrifier struct {
-	CarbonIntensityFinder carbon.CarbonItensityFinder
+	cif carbon.CarbonItensityFinder
 }
 
 func NewTransmogrifier(c carbon.CarbonItensityFinder) Transmogrifier {
 	return Transmogrifier{
-		CarbonIntensityFinder: c,
+		cif: c,
 	}
 }
 
@@ -24,9 +24,7 @@ func (t Transmogrifier) HandleGeneric() alexa.Response {
 }
 
 func (t Transmogrifier) HandleCarbonIntensity() alexa.Response {
-	ukci := carbon.CreateCarbonIntensityFinder("https://api.carbonintensity.org.uk/intensity")
-
-	ci, err := ukci.GetCurrentCarbonIntensity()
+	ci, err := t.cif.GetCurrentCarbonIntensity()
 	if err != nil {
 		return alexa.NewSimpleResponse("Error", "There was an error getting the carbon intensity.")
 	}

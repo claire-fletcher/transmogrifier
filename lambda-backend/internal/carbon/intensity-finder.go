@@ -1,4 +1,4 @@
-//go:generate mockgen -source=carbon.go -destination=mock/carbon.go
+//go:generate mockgen -source=intensity-finder.go -destination=mock/intensity-finder.go
 package carbon
 
 import (
@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// TODO: consider correct interface and mock implementation
+// TODO: consider correct interface and mock implementation in consumer
 type CarbonItensityFinder interface {
 	GetCurrentCarbonIntensity() (int, error)
 }
