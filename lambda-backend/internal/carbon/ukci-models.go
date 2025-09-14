@@ -1,4 +1,4 @@
-package CarbonIntensityFinder
+package carbon
 
 // UKCIResponse represents the structure of the response from the UK Carbon Intensity API
 type UKCIResponse struct {
