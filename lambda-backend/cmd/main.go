@@ -5,16 +5,17 @@ import (
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/claire-fletcher/transmogrifier/internal/alexa"
-	cif "github.com/claire-fletcher/transmogrifier/internal/carbon-intensity-finder"
+	"github.com/claire-fletcher/transmogrifier/internal/carbon"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/aws/aws-lambda-go/otellambda"
 )
 
 type Transmogrifier struct {
-	CarbonIntensityFinder cif.CarbonItensityFinder
+	cif carbon.CarbonItensityFinder
 }
 
-func NewTransmogrifier(c cif.CarbonItensityFinder) Transmogrifier {
+func NewTransmogrifier(c carbon.CarbonItensityFinder) Transmogrifier {
 	return Transmogrifier{
-		CarbonIntensityFinder: c,
+		cif: c,
 	}
 }
 
@@ -23,12 +24,12 @@ func (t Transmogrifier) HandleGeneric() alexa.Response {
 }
 
 func (t Transmogrifier) HandleCarbonIntensity() alexa.Response {
-	currentCI, err := t.CarbonIntensityFinder.GetCurrentCarbonIntensity()
+	ci, err := t.cif.GetCurrentCarbonIntensity()
 	if err != nil {
 		return alexa.NewSimpleResponse("Error", "There was an error getting the carbon intensity.")
 	}
 
-	return alexa.NewSimpleResponse("Carbon Intensity", "The current carbon intensity is "+fmt.Sprint(currentCI))
+	return alexa.NewSimpleResponse("Carbon Intensity", "The current carbon intensity is "+fmt.Sprint(ci))
 }
 
 /** Below here is the lambda specific work. we could split out transmogrifier into its own thing too but it is the MAIN part
@@ -50,10 +51,7 @@ func IntentDispatcher(t Transmogrifier, request alexa.Request) alexa.Response {
 
 // This is the specific lambda handler for a request coming in
 func Handler(request alexa.Request) (alexa.Response, error) {
-	ukcif, err := cif.CreateCarbonIntensityFinder("https://api.carbonintensity.org.uk/intensity")
-	if err != nil {
-		return alexa.Response{}, err
-	}
+	ukcif := carbon.CreateCarbonIntensityFinder("https://api.carbonintensity.org.uk/intensity")
 	t := NewTransmogrifier(ukcif)
 
 	return IntentDispatcher(t, request), nil
@@ -61,5 +59,5 @@ func Handler(request alexa.Request) (alexa.Response, error) {
 
 func main() {
 	// Trigger
-	lambda.Start(Handler)
+	lambda.Start(otellambda.InstrumentHandler(Handler))
 }

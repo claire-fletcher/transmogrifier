@@ -3,10 +3,10 @@ package main_test
 import (
 	"testing"
 
-	mock_CarbonIntensityFinder "github.com/claire-fletcher/transmogrifier/internal/carbon-intensity-finder/mock"
 	"go.uber.org/mock/gomock"
 
 	. "github.com/claire-fletcher/transmogrifier/cmd"
+	mock_carbon "github.com/claire-fletcher/transmogrifier/internal/carbon/mock"
 )
 
 func TestHandleCarbonIntensityReturnsTheIntensity(t *testing.T) {
@@ -14,7 +14,7 @@ func TestHandleCarbonIntensityReturnsTheIntensity(t *testing.T) {
 	/** Arrange **/
 	testIntensity := 123
 	mockCtrl := gomock.NewController(t)
-	mockCFI := mock_CarbonIntensityFinder.NewMockCarbonItensityFinder(mockCtrl)
+	mockCFI := mock_carbon.NewMockCarbonItensityFinder(mockCtrl)
 	mockCFI.EXPECT().GetCurrentCarbonIntensity().Return(testIntensity, nil)
 
 	testTransmogrifier := NewTransmogrifier(mockCFI)

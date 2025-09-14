@@ -1,4 +1,4 @@
-package CarbonIntensityFinder_test
+package carbon_test
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"testing"
 
-	. "github.com/claire-fletcher/transmogrifier/internal/carbon-intensity-finder"
+	. "github.com/claire-fletcher/transmogrifier/internal/carbon"
 )
 
 func createMockUKCIResponse(actual int) string {
@@ -39,10 +39,7 @@ func TestCarbonIntensityFinderReturnsValue(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to parse the carbon intensity finder url: %v", err)
 	}
-	testCIF, err := CreateCarbonIntensityFinder(u.String())
-	if err != nil {
-		t.Fatalf("Failed to create the carbon intensity finder: %v", err)
-	}
+	testCIF := CreateCarbonIntensityFinder(u.String())
 
 	/** Act **/
 	result, err := testCIF.GetCurrentCarbonIntensity()
